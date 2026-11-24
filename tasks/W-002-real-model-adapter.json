@@ -1,0 +1,24 @@
+{
+  "id": "W-002",
+  "title": "接入真实模型适配器（openai-compatible），保留 mock 为默认",
+  "owner": "unassigned",
+  "status": "pending",
+  "blockedBy": [
+    "W-001"
+  ],
+  "writeScopes": [
+    "active/agents-workbench/scripts/model/",
+    "active/agents-workbench/workbench.config.json"
+  ],
+  "acceptance": [
+    "provider=mock 时不产生任何网络请求",
+    "provider=openai-compatible 时读取 apiKeyEnv 指定的环境变量",
+    "缺少 apiKey 时报错信息明确且退出码非 0"
+  ],
+  "steps": [
+    "抽出 model adapter 接口：complete(prompt, opts) -> { text, usage }",
+    "实现 mock adapter（确定性输出）",
+    "实现 openai-compatible adapter（fetch，可注入 baseUrl）"
+  ],
+  "result": null
+}

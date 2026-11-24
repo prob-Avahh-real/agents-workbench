@@ -1,0 +1,24 @@
+{
+  "id": "W-003",
+  "title": "导出运行报告：把 runs/ 汇总成一份可读的 markdown",
+  "owner": "unassigned",
+  "status": "pending",
+  "blockedBy": [
+    "W-002"
+  ],
+  "writeScopes": [
+    "active/agents-workbench/scripts/",
+    "active/agents-workbench/runs/reports/"
+  ],
+  "acceptance": [
+    "report 子命令能读取全部 run 日志并聚合",
+    "输出包含任务 id、状态、耗时、退出码",
+    "无 run 日志时给出友好提示且退出码为 0"
+  ],
+  "steps": [
+    "读取 runs/ 下全部 run-*.json",
+    "按 taskId 聚合状态与耗时",
+    "写出 runs/reports/<timestamp>.md"
+  ],
+  "result": null
+}

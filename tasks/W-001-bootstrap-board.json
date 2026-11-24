@@ -1,0 +1,21 @@
+{
+  "id": "W-001",
+  "title": "引导任务板：打通 领取 → 执行 → 产物 → 验收 全流程",
+  "owner": "lead",
+  "status": "done",
+  "blockedBy": [],
+  "writeScopes": [
+    "active/agents-workbench/tasks/",
+    "active/agents-workbench/workbench.config.json"
+  ],
+  "acceptance": [
+    "tasks/ 下任务文件可被 runner 读取",
+    "workbench.config.json 中 roster 与 model 字段完整"
+  ],
+  "steps": [
+    "定义任务文件 schema 与写入范围约定",
+    "落盘 W-001/W-002/W-003 三条种子任务",
+    "设定 model.provider=mock 作为离线占位"
+  ],
+  "result": "任务板与配置就位，作为 runner 的输入契约。"
+}

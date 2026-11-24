@@ -1,0 +1,64 @@
+{
+  "name": "agents-workbench",
+  "version": "0.1.0",
+  "description": "本地多 Agent 协作工作台：花名册 + 任务板 + 可离线运行的 runner（模型层用 mock 占位）",
+  "model": {
+    "provider": "mock",
+    "id": "mock-deterministic-v1",
+    "baseUrl": "about:mock://local",
+    "apiKeyEnv": "WORKBENCH_MODEL_API_KEY",
+    "note": "provider=mock 时完全离线、零网络请求；后续把 provider 改成 openai-compatible 并设置 apiKeyEnv 即可接真实模型，runner 与任务板无需改动。"
+  },
+  "paths": {
+    "tasks": "tasks",
+    "runs": "runs",
+    "scripts": "scripts"
+  },
+  "runtime": {
+    "taskFilePattern": "*.json",
+    "runIdPattern": "run-<timestamp>-<taskId>",
+    "stepDelayMs": 0,
+    "requireNoNetwork": true
+  },
+  "roster": [
+    {
+      "name": "lead",
+      "role": "Team Lead / 契约与终验",
+      "relation": "managed",
+      "writeScopes": [
+        "active/agents-workbench/README.md",
+        "active/agents-workbench/TEAM.md",
+        "active/agents-workbench/workbench.config.json",
+        "active/agents-workbench/tasks/"
+      ],
+      "reports": "user"
+    },
+    {
+      "name": "forge",
+      "role": "Builder / runner 实现",
+      "relation": "managed",
+      "writeScopes": [
+        "active/agents-workbench/scripts/",
+        "active/agents-workbench/tools/",
+        "active/agents-workbench/runs/"
+      ],
+      "reports": "lead"
+    },
+    {
+      "name": "audit",
+      "role": "Verifier / 独立验收",
+      "relation": "managed",
+      "writeScopes": [
+        "active/agents-workbench/runs/VERIFICATION.md",
+        "active/agents-workbench/runs/verify-suite*.log"
+      ],
+      "reports": "lead"
+    }
+  ],
+  "acceptance": {
+    "mustRunOffline": true,
+    "mustExposeBoardView": true,
+    "mustEnforceDependencies": true,
+    "mustReportExitCodes": true
+  }
+}

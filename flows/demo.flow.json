@@ -1,0 +1,159 @@
+{
+  "id": "demo",
+  "name": "并发编排演示：从需求到发布",
+  "agents": 4,
+  "workspace": "runs",
+  "model": {
+    "provider": "mock",
+    "id": "mock-flow-v1",
+    "latencyMs": [300, 500],
+    "failFirst": {
+      "T-006": 1
+    }
+  },
+  "tasks": [
+    {
+      "id": "T-001",
+      "title": "需求澄清与范围界定",
+      "role": "analyst",
+      "needs": [],
+      "acceptance": [
+        "需求范围已书面化并显式列出非目标项",
+        "每个用户故事都有可判定的完成标准"
+      ],
+      "maxAttempts": 2,
+      "steps": ["访谈干系人", "收敛范围", "写入需求摘要"]
+    },
+    {
+      "id": "T-002",
+      "title": "数据模型与接口契约",
+      "role": "architect",
+      "needs": ["T-001"],
+      "acceptance": [
+        "接口契约覆盖全部字段与类型",
+        "迁移脚本可在失败后回滚"
+      ],
+      "maxAttempts": 2,
+      "steps": ["抽象实体", "冻结接口", "设计迁移"]
+    },
+    {
+      "id": "T-003",
+      "title": "后端 API 实现",
+      "role": "builder",
+      "needs": ["T-002"],
+      "acceptance": [
+        "所有端点状态码语义正确",
+        "输入校验与错误码映射完整"
+      ],
+      "maxAttempts": 2,
+      "steps": ["实现路由", "接入校验", "接数据库"]
+    },
+    {
+      "id": "T-004",
+      "title": "前端界面实现",
+      "role": "builder",
+      "needs": ["T-002"],
+      "acceptance": [
+        "关键路径可完整交互无阻塞",
+        "空态与错误态均有明确提示"
+      ],
+      "maxAttempts": 2,
+      "steps": ["搭页面骨架", "接后端契约", "补齐空态"]
+    },
+    {
+      "id": "T-005",
+      "title": "单元与集成测试",
+      "role": "builder",
+      "needs": ["T-003", "T-004"],
+      "acceptance": [
+        "单元测试覆盖核心分支",
+        "集成测试覆盖菱形依赖的两条汇合路径"
+      ],
+      "maxAttempts": 2,
+      "steps": ["补单测", "补集成用例", "固化回归集"]
+    },
+    {
+      "id": "T-006",
+      "title": "用户文档编写",
+      "role": "writer",
+      "needs": ["T-002"],
+      "acceptance": [
+        "文档含快速上手章节",
+        "命令示例均可直接复制执行"
+      ],
+      "maxAttempts": 2,
+      "steps": ["写快速上手", "写配置参考", "校对示例"]
+    },
+    {
+      "id": "T-007",
+      "title": "独立验收",
+      "role": "verifier",
+      "needs": ["T-005", "T-006", "T-012"],
+      "acceptance": [
+        "验收结论与产物逐条对齐",
+        "未覆盖风险已显式列出"
+      ],
+      "maxAttempts": 2,
+      "steps": ["重跑验收用例", "交叉核对产物", "登记残余风险"]
+    },
+    {
+      "id": "T-008",
+      "title": "并发压测",
+      "role": "verifier",
+      "needs": ["T-002", "T-011"],
+      "acceptance": [
+        "并发 4 时无超时类错误",
+        "P95 延迟在预算之内"
+      ],
+      "maxAttempts": 2,
+      "steps": ["按接口契约生成压测负载", "接入可观测性指标", "跑并发档位并汇总延迟分布"]
+    },
+    {
+      "id": "T-009",
+      "title": "发布说明与变更清单",
+      "role": "writer",
+      "needs": ["T-007", "T-008"],
+      "acceptance": [
+        "每条变更都可追溯到任务 id"
+      ],
+      "maxAttempts": 2,
+      "steps": ["汇总变更", "生成发布说明"]
+    },
+    {
+      "id": "T-010",
+      "title": "发布与回归验证",
+      "role": "operator",
+      "needs": ["T-009"],
+      "acceptance": [
+        "回归套件全绿",
+        "已知限制：Windows 路径尚未覆盖，预期失败!"
+      ],
+      "maxAttempts": 2,
+      "steps": ["灰度发布", "跑回归套件", "记录限制项"]
+    },
+    {
+      "id": "T-011",
+      "title": "可观测性埋点与告警",
+      "role": "builder",
+      "needs": [],
+      "acceptance": [
+        "关键路径均有结构化日志",
+        "告警阈值可配置且有默认值"
+      ],
+      "maxAttempts": 2,
+      "steps": ["接入结构化日志", "定义指标", "配置告警阈值"]
+    },
+    {
+      "id": "T-012",
+      "title": "安全与权限校验",
+      "role": "auditor",
+      "needs": [],
+      "acceptance": [
+        "越权访问被拒绝并留痕",
+        "敏感字段默认脱敏"
+      ],
+      "maxAttempts": 2,
+      "steps": ["梳理权限矩阵", "补越权用例", "核对脱敏规则"]
+    }
+  ]
+}
